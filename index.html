@@ -3,21 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Radio Vyrorei al Fallo</title>
+    <title>Radio Vyrorei al Fallo - Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="player-container">
         <h1>📻 Vyrorei al Fallo</h1>
-        <p class="status-text">Conectando con el NAS en Capiatá...</p>
+        <p id="status" class="status-text">Sistema de monitoreo listo</p>
         
         <div class="cover-art">
-            <p>Esperando señal...</p>
+            <p id="now-playing">Señal de Audio Lista</p>
         </div>
 
-        <button id="play-button">PLAY</button>
+        <button id="play-button" onclick="togglePlay()">PLAY</button>
     </div>
+
+    <audio id="radio-stream" src="https://vyroreialfallo.com/listen/radio/radio.mp3"></audio>
+
+    <script>
+        const audio = document.getElementById('radio-stream');
+        const btn = document.getElementById('play-button');
+        const statusText = document.getElementById('status');
+
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play().catch(e => {
+                    statusText.innerText = "Error: Verifica conexión al NAS";
+                    statusText.style.color = "#ff0000";
+                });
+                btn.innerText = "PAUSE";
+                btn.style.borderColor = "#ff4500";
+                btn.style.color = "#ff4500";
+                statusText.innerText = "Reproduciendo en vivo...";
+                statusText.style.color = "#00ff00";
+            } else {
+                audio.pause();
+                btn.innerText = "PLAY";
+                btn.style.borderColor = "#00ff00";
+                btn.style.color = "#00ff00";
+                statusText.innerText = "Pausado";
+                statusText.style.color = "#eee";
+            }
+        }
+    </script>
 
 </body>
 </html>
