@@ -6,14 +6,17 @@
     <title>Radio Vyrorei al Fallo</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body style="background-color: #1a1a1a; color: white; font-family: sans-serif; text-align: center;">
+<body>
 
-    <h1>📻 Dashboard Vyrorei al Fallo</h1>
-    <p>Conectando con el NAS en Capiatá...</p>
+    <div id="player-container">
+        <h1>📻 Vyrorei al Fallo</h1>
+        <p class="status-text">Conectando con el NAS en Capiatá...</p>
+        
+        <div class="cover-art">
+            <p>Esperando señal...</p>
+        </div>
 
-    <div id="player-container" style="border: 2px solid #555; padding: 20px; display: inline-block; border-radius: 15px;">
-        <p>Cargando carátula...</p>
-        <button style="padding: 10px 20px;">PLAY</button>
+        <button id="play-button">PLAY</button>
     </div>
 
 </body>
