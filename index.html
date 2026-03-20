@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vyrorei al Fallo - Classic Spectrum v8.9</title>
+    <title>Vyrorei al Fallo - Ultra Slow v9.7</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -77,6 +78,33 @@
         </div>
     </div>
 
+    <div id="artist-details-module">
+        <div class="details-blur-bg" id="details-bg"></div>
+        <div class="details-content">
+            <span class="section-tag">FICHA TÉCNICA DE LA PISTA</span>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <label>ARTISTA</label>
+                    <p id="det-artist">Cargando...</p>
+                </div>
+                <div class="detail-item">
+                    <label>ÁLBUM</label>
+                    <p id="det-album">Cargando...</p>
+                </div>
+                <div class="detail-item">
+                    <label>GÉNERO MUSICAL</label>
+                    <p id="det-genre">...</p>
+                </div>
+                <div class="detail-item bio-block">
+                    <label>RESEÑA MUSICAL E INTEGRANTES</label>
+                    <div class="bio-viewport">
+                        <p id="det-bio">Sincronizando con la base de datos...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="request-modal" class="modal-overlay">
         <div class="modal-center-container">
             <div class="modal-content requests-dark-theme">
@@ -84,9 +112,7 @@
                     <span class="modal-title-text">BUSCAR Y SOLICITAR CANCIÓN</span>
                     <button class="close-btn" onclick="closeRequests()">&times;</button>
                 </div>
-                <div class="modal-body">
-                    <iframe id="request-frame" src="" frameborder="0" allowtransparency="true"></iframe>
-                </div>
+                <div class="modal-body"><iframe id="request-frame" src="" frameborder="0" allowtransparency="true"></iframe></div>
             </div>
         </div>
     </div>
@@ -103,8 +129,6 @@
         const artist = document.getElementById('song-artist');
         const cover = document.getElementById('cover-art');
         const zoomImg = document.getElementById('zoom-img');
-        const placeholder = document.getElementById('cover-placeholder');
-        const nextPreview = document.getElementById('next-preview-box');
         const nextTitle = document.getElementById('next-title');
         const nextArtistSub = document.getElementById('next-artist-sub');
         const nextCover = document.getElementById('next-cover');
@@ -118,7 +142,16 @@
         const progressFill = document.getElementById('progress-fill');
         const visualizer = document.getElementById('visualizer');
         
+        // Elementos Panel Detalles
+        const dArtist = document.getElementById('det-artist');
+        const dAlbum = document.getElementById('det-album');
+        const dGenre = document.getElementById('det-genre');
+        const dBio = document.getElementById('det-bio');
+        const dBg = document.getElementById('details-bg');
+        
         const DEFAULT_COVER = 'img/radio-cover.jpg';
+        const LASTFM_API_KEY = 'f124a23ed56d8873328ac32f7c469e35'; 
+
         let elapsed = 0, duration = 0;
 
         const stations = {
@@ -177,29 +210,26 @@
 
                 let rawTitle = currentSong.title ? currentSong.title.trim() : "Canción Desconocida";
                 let rawArtist = currentSong.artist ? currentSong.artist.trim() : "";
+                let rawAlbum = currentSong.album ? currentSong.album.trim() : "Single / Desconocido";
 
                 if (rawArtist === "" || rawArtist.toLowerCase() === "unknown") {
                     if (rawTitle.includes(" - ")) {
                         const parts = rawTitle.split(" - ");
-                        artist.innerText = parts[0].trim();
-                        title.innerText = parts[1].trim();
+                        rawArtist = parts[0].trim();
+                        rawTitle = parts[1].trim();
                     } else {
-                        title.innerText = rawTitle;
-                        artist.innerText = (currentStation === 'B') ? "REGGAETON & RETRO MIX" : "VYROREI AL FALLO";
+                        rawArtist = (currentStation === 'B') ? "REGGAETON & RETRO MIX" : "VYROREI AL FALLO";
                     }
-                } else {
-                    title.innerText = rawTitle;
-                    artist.innerText = rawArtist;
                 }
 
-                if (currentSong.art && currentSong.art !== "" && !currentSong.art.includes('default')) {
-                    cover.src = currentSong.art;
-                } else {
-                    cover.src = DEFAULT_COVER;
-                }
+                title.innerText = rawTitle;
+                artist.innerText = rawArtist;
+
+                let finalArt = (currentSong.art && !currentSong.art.includes('default')) ? currentSong.art : DEFAULT_COVER;
+                cover.src = finalArt;
+                dBg.style.backgroundImage = `url(${finalArt})`;
                 cover.onerror = function() { this.src = DEFAULT_COVER; this.onerror = null; };
                 cover.style.display = 'block';
-                placeholder.style.display = 'none';
                 onAirIndicator.classList.remove('offline');
                 
                 stationLabel.innerText = stations[currentStation].name;
@@ -207,15 +237,15 @@
                 duration = np.duration;
                 totalTimeTxt.innerText = formatTime(duration);
 
+                // SIGUIENTE
                 if (data.playing_next) {
                     nextTitle.innerText = data.playing_next.song.title;
                     nextArtistSub.innerText = data.playing_next.song.artist || "Siguiente Tema";
                     let nArt = (data.playing_next.song.art && !data.playing_next.song.art.includes('default')) ? data.playing_next.song.art : DEFAULT_COVER;
                     nextCover.src = nArt;
-                    nextCover.onerror = function() { this.src = DEFAULT_COVER; this.onerror = null; };
-                    nextPreview.setAttribute('data-art', nextCover.src);
                 }
 
+                // HISTORIAL
                 const history = data.song_history;
                 historyList.innerHTML = "";
                 for (let i = 0; i < 3; i++) {
@@ -225,13 +255,47 @@
                         const div = document.createElement('div');
                         div.className = 'history-item-full';
                         div.onclick = function() { openZoomCover(this.querySelector('img').src); };
-                        div.innerHTML = `<img src="${hArt}" class="h-art" onerror="this.src='${DEFAULT_COVER}'; this.onerror=null;"><div class="h-info"><p class="h-title">${hSong.title}</p><p class="h-sub">${hSong.artist || 'Vyrorei'}</p><p class="h-album">${hSong.album || 'Single'}</p></div>`;
+                        div.innerHTML = `<img src="${hArt}" class="h-art" onerror="this.src='${DEFAULT_COVER}'"><div class="h-info"><p class="h-title">${hSong.title}</p><p class="h-sub">${hSong.artist || 'Vyrorei'}</p></div>`;
                         historyList.appendChild(div);
                     }
                 }
+
+                // --- MOTOR INTELIGENTE v9.7 (Ultra Slow Scroll & Reorder) ---
+                dArtist.innerText = rawArtist;
+                dAlbum.innerText = rawAlbum;
+
+                if (rawArtist && rawArtist !== "VYROREI AL FALLO") {
+                    fetch(`https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${encodeURIComponent(rawArtist)}&api_key=${LASTFM_API_KEY}&format=json&lang=es`)
+                        .then(res => res.json())
+                        .then(lData => {
+                            if (lData.artist) {
+                                if (lData.artist.tags && lData.artist.tags.tag.length > 0) {
+                                    dGenre.innerText = lData.artist.tags.tag.slice(0, 3).map(t => t.name).join(' / ').toUpperCase();
+                                }
+                                let cleanBio = lData.artist.bio.summary.replace(/<[^>]*>?/gm, '').replace(/Read more on Last.fm/g, '');
+                                dBio.innerHTML = `<b>Reseña:</b> ${cleanBio} <br><br> <b>Producción:</b> Álbum "${rawAlbum}".`;
+                                
+                                // Reset Animación
+                                dBio.style.animation = 'none';
+                                dBio.style.top = '0';
+                                setTimeout(() => {
+                                    const textHeight = dBio.scrollHeight;
+                                    const viewportHeight = 120;
+                                    if (textHeight > viewportHeight) {
+                                        // FACTOR 50: Scroll mucho más lento
+                                        const duration = textHeight / 50; 
+                                        dBio.style.animation = `scrollBio ${duration}s linear 3s infinite`;
+                                        const style = document.createElement('style');
+                                        style.innerHTML = `@keyframes scrollBio { 0% { top: 0px; } 10% { top: 0px; } 100% { top: -${textHeight}px; } }`;
+                                        document.head.appendChild(style);
+                                    }
+                                }, 1000);
+                            }
+                        });
+                }
+
             } catch (error) {
                 onAirIndicator.classList.add('offline');
-                title.innerText = "SISTEMA FUERA DE LÍNEA";
             }
         }
 
