@@ -3,63 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Radio Vyrorei al Fallo - En Vivo</title>
+    <title>Vyrorei al Fallo - Classic Spectrum v8.9</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="player-container">
-        <h1>📻 Vyrorei al Fallo</h1>
-        <p id="status" class="status-text">Monitoreando NAS Capiatá...</p>
-        
-        <div class="cover-art">
-            <p id="now-playing">Cargando info...</p>
+    <div id="walkman-horizontal">
+        <div class="left-col">
+            <div class="cover-art-box" onclick="openZoomCover(document.getElementById('cover-art').src)">
+                <img id="cover-art" src="" alt="Portada" style="display:none;">
+                <div id="cover-placeholder">🎙️</div>
+            </div>
+            <div id="on-air-indicator" class="on-air-box offline">
+                <span class="on-air-text">ON - AIR</span>
+            </div>
         </div>
 
-        <button id="play-button" onclick="togglePlay()">PLAY</button>
+        <div class="center-col">
+            <div class="song-header">
+                <p id="station-label">Sincronizando...</p>
+                <div class="marquee-box main-title">
+                    <h2 id="song-title">Cargando...</h2>
+                </div>
+                <h3 id="song-artist">Vyrorei al Fallo</h3>
+                
+                <div id="visualizer" class="spectrum-container">
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                </div>
+            </div>
+
+            <div class="time-container">
+                <span id="current-time" class="time-txt">00:00</span>
+                <div class="progress-bar-bg"><div id="progress-fill"></div></div>
+                <span id="total-time" class="time-txt">00:00</span>
+            </div>
+
+            <div class="controls-layout">
+                <div class="station-row">
+                    <button id="btn-station-a" class="sony-btn active" onclick="switchStation('A')">ROCK/METAL/HIPHOP</button>
+                    <button id="btn-station-b" class="sony-btn" onclick="switchStation('B')">REGGAETON/RETRO</button>
+                </div>
+                <button id="request-btn" class="sony-action-btn" onclick="openRequests()">SOLICITAR CANCIÓN</button>
+            </div>
+
+            <div class="history-section">
+                <span class="section-tag">ANTERIORES:</span>
+                <div id="history-list" class="history-grid"></div>
+            </div>
+        </div>
+
+        <div class="right-col">
+            <div class="next-section-box">
+                <span class="section-tag">SIGUIENTE:</span>
+                <div class="next-card" id="next-preview-box" onclick="openZoomCover(this.getAttribute('data-art'))">
+                    <img id="next-cover" src="" alt="Siguiente">
+                    <div class="marquee-box mini">
+                        <p id="next-title">...</p>
+                    </div>
+                    <p id="next-artist-sub">...</p>
+                </div>
+            </div>
+
+            <div class="volume-section-box">
+                <div class="vol-info">
+                    <span class="vol-icon">🔊</span>
+                    <span class="vol-num" id="vol-display">80</span>
+                </div>
+                <input type="range" id="volume-control" min="0" max="100" value="80">
+            </div>
+        </div>
     </div>
 
-    <audio id="radio-stream" src="https://vyroreialfallo.com/listen/radio/radio.mp3"></audio>
+    <div id="request-modal" class="modal-overlay">
+        <div class="modal-center-container">
+            <div class="modal-content requests-dark-theme">
+                <div class="modal-header">
+                    <span class="modal-title-text">BUSCAR Y SOLICITAR CANCIÓN</span>
+                    <button class="close-btn" onclick="closeRequests()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <iframe id="request-frame" src="" frameborder="0" allowtransparency="true"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="zoom-modal" class="modal zoom-theme" onclick="closeZoomCover()">
+        <img id="zoom-img" src="">
+    </div>
+
+    <audio id="radio-stream" src="https://radio.vyroreialfallo.com/listen/radio_vyrorei/radio.mp3" autoplay></audio>
 
     <script>
         const audio = document.getElementById('radio-stream');
-        const btn = document.getElementById('play-button');
-        const nowPlaying = document.getElementById('now-playing');
+        const title = document.getElementById('song-title');
+        const artist = document.getElementById('song-artist');
+        const cover = document.getElementById('cover-art');
+        const zoomImg = document.getElementById('zoom-img');
+        const placeholder = document.getElementById('cover-placeholder');
+        const nextPreview = document.getElementById('next-preview-box');
+        const nextTitle = document.getElementById('next-title');
+        const nextArtistSub = document.getElementById('next-artist-sub');
+        const nextCover = document.getElementById('next-cover');
+        const volumeSlider = document.getElementById('volume-control');
+        const volDisplay = document.getElementById('vol-display');
+        const historyList = document.getElementById('history-list');
+        const stationLabel = document.getElementById('station-label');
+        const onAirIndicator = document.getElementById('on-air-indicator');
+        const currentTimeTxt = document.getElementById('current-time');
+        const totalTimeTxt = document.getElementById('total-time');
+        const progressFill = document.getElementById('progress-fill');
+        const visualizer = document.getElementById('visualizer');
+        
+        const DEFAULT_COVER = 'img/radio-cover.jpg';
+        let elapsed = 0, duration = 0;
 
-        // Función para Play/Pause
-        function togglePlay() {
-            if (audio.paused) {
-                audio.play();
-                btn.innerText = "PAUSE";
-                btn.style.borderColor = "#ff4500";
-                btn.style.color = "#ff4500";
-            } else {
-                audio.pause();
-                btn.innerText = "PLAY";
-                btn.style.borderColor = "#00ff00";
-                btn.style.color = "#00ff00";
+        const stations = {
+            'A': { id: 1, stream: 'https://radio.vyroreialfallo.com/listen/radio_vyrorei/radio.mp3', name: 'ROCK, METAL, HIPHOP', req: 'https://radio.vyroreialfallo.com/public/radio_vyrorei/embed-requests' },
+            'B': { id: 2, stream: 'https://radio.vyroreialfallo.com/listen/stream_vyrorei/radio.mp3', name: 'RETRO, REGGAETON, ELECTRO', req: 'https://radio.vyroreialfallo.com/public/stream_vyrorei/embed-requests' }
+        };
+
+        let currentStation = 'A';
+
+        function formatTime(s) {
+            const min = Math.floor(s / 60);
+            const sec = Math.floor(s % 60);
+            return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+        }
+
+        function updateProgressBar() {
+            if (duration > 0 && elapsed < duration) {
+                elapsed++;
+                const percent = (elapsed / duration) * 100;
+                progressFill.style.width = percent + "%";
+                currentTimeTxt.innerText = formatTime(elapsed);
             }
         }
 
-        // Función para conectar con la API de tu AzuraCast
+        function switchStation(st) {
+            currentStation = st;
+            audio.pause(); audio.src = stations[st].stream; audio.load(); audio.play();
+            stationLabel.innerText = stations[st].name;
+            document.getElementById('btn-station-a').classList.toggle('active', st === 'A');
+            document.getElementById('btn-station-b').classList.toggle('active', st === 'B');
+            updateMetadata();
+        }
+
+        function openZoomCover(src) { if(src) { zoomImg.src = src; document.getElementById('zoom-modal').style.display = 'flex'; } }
+        function closeZoomCover() { document.getElementById('zoom-modal').style.display = 'none'; }
+        function openRequests() { document.getElementById('request-frame').src = stations[currentStation].req; document.getElementById('request-modal').style.display = 'flex'; }
+        function closeRequests() { document.getElementById('request-modal').style.display = 'none'; document.getElementById('request-frame').src = ''; }
+
+        audio.volume = volumeSlider.value / 100;
+        volumeSlider.addEventListener('input', (e) => {
+            audio.volume = e.target.value / 100;
+            volDisplay.innerText = e.target.value;
+        });
+
+        audio.onplay = () => visualizer.classList.remove('paused');
+        audio.onpause = () => visualizer.classList.add('paused');
+
         async function updateMetadata() {
             try {
-                // Reemplaza esta URL con la API pública de tu estación si es distinta
-                const response = await fetch('https://vyroreialfallo.com/api/nowplaying/radio');
+                const sid = stations[currentStation].id;
+                const response = await fetch(`https://radio.vyroreialfallo.com/api/nowplaying/${sid}?t=${Date.now()}`);
+                if (!response.ok) throw new Error("Offline");
                 const data = await response.json();
+                const np = data.now_playing;
+                const currentSong = np.song;
+
+                let rawTitle = currentSong.title ? currentSong.title.trim() : "Canción Desconocida";
+                let rawArtist = currentSong.artist ? currentSong.artist.trim() : "";
+
+                if (rawArtist === "" || rawArtist.toLowerCase() === "unknown") {
+                    if (rawTitle.includes(" - ")) {
+                        const parts = rawTitle.split(" - ");
+                        artist.innerText = parts[0].trim();
+                        title.innerText = parts[1].trim();
+                    } else {
+                        title.innerText = rawTitle;
+                        artist.innerText = (currentStation === 'B') ? "REGGAETON & RETRO MIX" : "VYROREI AL FALLO";
+                    }
+                } else {
+                    title.innerText = rawTitle;
+                    artist.innerText = rawArtist;
+                }
+
+                if (currentSong.art && currentSong.art !== "" && !currentSong.art.includes('default')) {
+                    cover.src = currentSong.art;
+                } else {
+                    cover.src = DEFAULT_COVER;
+                }
+                cover.onerror = function() { this.src = DEFAULT_COVER; this.onerror = null; };
+                cover.style.display = 'block';
+                placeholder.style.display = 'none';
+                onAirIndicator.classList.remove('offline');
                 
-                const song = data.now_playing.song.text;
-                nowPlaying.innerText = song;
+                stationLabel.innerText = stations[currentStation].name;
+                elapsed = np.elapsed;
+                duration = np.duration;
+                totalTimeTxt.innerText = formatTime(duration);
+
+                if (data.playing_next) {
+                    nextTitle.innerText = data.playing_next.song.title;
+                    nextArtistSub.innerText = data.playing_next.song.artist || "Siguiente Tema";
+                    let nArt = (data.playing_next.song.art && !data.playing_next.song.art.includes('default')) ? data.playing_next.song.art : DEFAULT_COVER;
+                    nextCover.src = nArt;
+                    nextCover.onerror = function() { this.src = DEFAULT_COVER; this.onerror = null; };
+                    nextPreview.setAttribute('data-art', nextCover.src);
+                }
+
+                const history = data.song_history;
+                historyList.innerHTML = "";
+                for (let i = 0; i < 3; i++) {
+                    if (history[i]) {
+                        const hSong = history[i].song;
+                        let hArt = (hSong.art && !hSong.art.includes('default')) ? hSong.art : DEFAULT_COVER;
+                        const div = document.createElement('div');
+                        div.className = 'history-item-full';
+                        div.onclick = function() { openZoomCover(this.querySelector('img').src); };
+                        div.innerHTML = `<img src="${hArt}" class="h-art" onerror="this.src='${DEFAULT_COVER}'; this.onerror=null;"><div class="h-info"><p class="h-title">${hSong.title}</p><p class="h-sub">${hSong.artist || 'Vyrorei'}</p><p class="h-album">${hSong.album || 'Single'}</p></div>`;
+                        historyList.appendChild(div);
+                    }
+                }
             } catch (error) {
-                nowPlaying.innerText = "Señal en Vivo";
-                console.error("Error obteniendo metadatos", error);
+                onAirIndicator.classList.add('offline');
+                title.innerText = "SISTEMA FUERA DE LÍNEA";
             }
         }
 
-        // Actualizar cada 15 segundos (respetando tiempos de pausa del servidor)
         setInterval(updateMetadata, 15000);
-        updateMetadata(); // Carga inicial
+        setInterval(updateProgressBar, 1000);
+        updateMetadata();
     </script>
-
 </body>
 </html>
