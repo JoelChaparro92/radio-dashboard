@@ -1,0 +1,171 @@
+/* css/walkman-red.css */
+/* 🐾 Sintonía de Fuente: Importamos Lacquer */
+@import url('https://fonts.googleapis.com/css2?family=Lacquer&display=swap');
+
+.text-vyrorei-al-fallo {
+    font-family: 'Lacquer', cursive !important;
+    text-transform: uppercase;
+    font-size: 3.2rem; /* Aumentamos el tamaño para que se note la textura */
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+body {
+    background-color: #0a0a0a !important;
+    background-image: 
+        radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.9) 100%),
+        url('../img/fondo_ladrillos.jpg') !important;
+    background-size: 350px auto !important;
+    background-repeat: repeat !important;
+    background-attachment: fixed !important;
+    background-blend-mode: multiply;
+}
+
+.juntos {
+    display: flex;
+    align-items: center;
+    white-space: nowrap; /* Refuerzo para que no se rompa el texto */
+}
+
+.color-vyrorei {
+    color: #ff0000;
+    text-shadow: 0 0 10px #ff0000, 0 0 20px rgba(255, 0, 0, 0.7);
+}
+
+.color-fallo {
+    color: #009dff;
+    text-shadow: 0 0 10px #009dff, 0 0 20px rgba(0, 157, 255, 0.7);
+    
+    /* 🐾 SINTONÍA DE INFRAESTRUCTURA: */
+    /* Probá con 5px para separar, o -2px para juntar más las letras */
+    letter-spacing: 2px; 
+    
+    /* Si querés que se mueva un poco a la derecha o izquierda: */
+    margin-left: 10px; 
+}
+
+.text-al {
+    color: #ffffff;
+    font-size: 1.1em; /* Un poquito más chica que las grandes para que quepa bien */
+    font-family: inherit;
+    display: inline-block; /* OBLIGATORIO para poder moverla y rotarla */
+    
+    /* --- JUGÁ CON ESTOS VALORES --- */
+    
+    /* 1. Rotación: Cambiá el -15 por lo que quieras (ej: 10, -5, 20) */
+    transform: rotate(-15deg); 
+    
+    /* 2. Posición vertical: Subila con números negativos (ej: -10px) o bajala con positivos */
+    vertical-align: middle;
+    position: relative;
+    top: -4px; 
+    
+    /* 3. Espaciado: Para que no choque con las otras letras */
+    margin: 0 15px; 
+    
+    /* Brillo para que no se pierda */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+/* css/walkman-red.css - EL RECORTE DEFINITIVO (Al final) */
+
+.btn-login-corner {
+    /* Posición INAMOVIBLE */
+    position: relative !important;
+    bottom: 15px !important;
+    right: 18px !important;
+    margin: 0 !important;
+
+    /* Mueve manualmente desde el centro */
+    transform: translateX(30px);  /* ← CAMBIA ESTE NÚMERO */
+                                   /* + = derecha | - = izquierda */
+    
+    /* TAMAÑO ULTRACOMPACTO (mata Bootstrap) */
+    /* 1. Padding: más relleno = botón más ancho/alto */
+    padding: 6px 60px !important;  /* ← Aumenta aquí (era 2px 6px) */
+    /* 2. Letra: más grande = texto más visible */
+    font-size: 12px !important;  /* ← Aumenta aquí (era 10px) */
+    line-height: 1 !important;
+    height: auto !important;
+    min-height: unset !important;
+    /* 3. Si quieres más alto específicamente */
+    max-height: 24px !important; /* ← Opcional (era 24px) */
+    
+    /* FORMA Y BORDES */
+    border-radius: 6px !important;
+    /* 4. Bordes más gruesos (opcional) */
+    border: 2px solid #ff0000 !important; /* ← Más grueso */
+    
+    /* VYROREI STYLE */
+    color: #ff0000 !important;
+    background-color: rgba(0,0,0,0.85) !important;
+    box-shadow: 0 0 6px rgba(0,157,255,0.6);
+    
+    /* COMPORTAMIENTO */
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+    z-index: 999 !important;
+    cursor: pointer !important;
+    display: inline-block !important;
+    
+    /* ANIMACIÓN SUAVE */
+    transition: all 0.2s ease;
+}
+
+.btn-login-corner:hover {
+    box-shadow: 0 0 12px #ff0000, 0 0 20px rgba(0,157,255,0.4) !important;
+    transform: translateY(-1px) scale(1.05);
+}
+
+/* Contenedor centrado */
+.login-under-subtitle {
+    margin-top: 18px !important;
+    text-align: center !important;
+    width: 100% !important;
+}
+
+#app-container {
+    max-width: 100% !important;
+    padding: 0 !important;
+}
+
+/* Header de extremo a extremo */
+#app-container header.row {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 50px !important;  /* Respira un poco desde la izquierda */
+    padding-right: 20px !important; /* Respira un poco desde la derecha */
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+    box-sizing: border-box !important;
+    min-height: 160px !important; /* Altura mínima del header */
+}
+
+/* Quitar margen negativo de Bootstrap .row */
+#app-container .row {
+    --bs-gutter-x: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* Contenedor del slider */
+.flyer-slider {
+    width: 650px !important;      /* ← Ancho del recuadro */
+    overflow: hidden !important;
+    border-radius: 8px !important;
+}
+
+/* Imagen del flyer */
+#flyer-img {
+    width: 100% !important;       /* Se adapta al contenedor */
+    height: 180px !important;     /* ← Altura del recuadro */
+    object-fit: cover !important; /* Recorta sin deformar */
+    border-radius: 8px !important;
+    border: 1px solid #ff0000 !important;
+    box-shadow: 0 0 10px rgba(255,0,0,0.5);
+    transition: opacity 0.4s ease;
+    display: block !important;
+}
+
