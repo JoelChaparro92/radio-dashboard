@@ -1,0 +1,840 @@
+/* css/player.css - Vyrorei al Fallo v11 */
+
+/* ─── CONTENEDOR PRINCIPAL ──────────────────────────────────────────────────── */
+#walkman-horizontal {
+    display: flex !important;
+    width: calc(100% - 40px) !important;
+    max-width: 1600px !important;
+    
+    /* 🐾 El michi dice: Usamos !important para ganarle al otro archivo */
+    margin-left: 20px !important;   /* Lo pegamos a la izquierda */
+    margin-right: auto !important;  /* Dejamos que todo el espacio libre sobre a la derecha */
+    
+    background: #1a1a1c;
+    border-radius: 20px;
+    padding: 25px;
+    gap: 30px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+    border: 1px solid #ff0000;
+    align-items: flex-start;
+    box-sizing: border-box;
+}
+
+/* ─── COLUMNA IZQUIERDA (AMPLIADA) ──────────────────────────────────────────────────────── */
+.left-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Aumentamos el espacio entre elementos */
+    min-width: 280px; /* Le damos más espacio a la columna */
+}
+
+/* LA PORTADA PRINCIPAL */
+.cover-art-box {
+    width: 250px !important;  /* De 140px subimos a 250px */
+    height: 250px !important;
+    min-width: 250px;
+    max-width: 250px !important;
+    border-radius: 15px;      /* Bordes un poco más redondeados */
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+    border: 3px solid #ff0000; /* Borde un poco más grueso */
+    background: #111;
+    flex-shrink: 0 !important;
+}
+
+#cover-art {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+}
+
+#cover-placeholder {
+    width: 100%;
+    height: 100%;
+    background: #222;
+}
+
+/* BOTÓN ON-AIR (AL AIRE) */
+#on-air-indicator.on-air-box {
+    padding: 10px 25px;
+    border-radius: 8px;
+    background: #111 !important;
+    transition: all 0.5s ease;
+    min-width: 180px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #333; /* Borde por defecto */
+}
+
+/* Texto base */
+#on-air-indicator .on-air-text {
+    font-weight: 900;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: all 0.5s ease;
+    display: block;
+}
+
+/* 🟢 FUERZA VERDE (Cuando el JS pone la clase .online) */
+#on-air-indicator.online {
+    border: 2px solid #00ff00 !important;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.4) !important;
+}
+
+#on-air-indicator.online .on-air-text {
+    color: #00ff00 !important;
+    text-shadow: 0 0 15px #00ff00 !important;
+}
+
+/* 🔴 FUERZA ROJO (Cuando el JS pone la clase .offline) */
+#on-air-indicator.offline {
+    border: 2px solid #ff0000 !important;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.4) !important;
+}
+
+#on-air-indicator.offline .on-air-text {
+    color: #ff0000 !important;
+    text-shadow: 0 0 15px #ff0000 !important;
+}
+
+/* CANTIDAD DE OYENTES */
+.listeners-box {
+    background: rgba(255, 0, 0, 0.15);
+    border: 1px solid #ff0000;
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-size: 1.5rem;        /* Subimos de 11px a 1.1rem (~18px) */
+    color: #dd8017;
+    font-weight: bold;
+    text-align: center;
+    min-width: 200px;
+}
+
+/* ─── COLUMNA CENTRAL ────────────────────────────────────────────────────────── */
+.left-history-col {
+    width: 100% !important;
+    min-width: 0 !important;
+    border-right: none !important;
+    padding-right: 0 !important;
+}
+
+/* Título del panel izquierdo */
+.left-history-col .section-tag {
+    font-size: 1.1rem;
+    color: #ebb70c;         /* Color dorado/amarillo para diferenciar */
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.history-card-box {
+    background: rgba(255, 0, 0, 0.05) !important;
+    border: 1px solid rgba(255, 0, 0, 0.2) !important;
+    border-radius: 12px;
+
+    /* ─── PASO 1: EL ANCHO TOTAL ─── */
+    /* Usamos 'calc' para que sea el 100% de la columna + el espacio que queremos ganar */
+    width: calc(132% + 40px) !important; 
+
+    /* ─── PASO 2: LA FUNCIÓN DE MOVIMIENTO A LA IZQUIERDA ─── */
+    /* 🐾 Esta es la clave: el número negativo lo 'empuja' hacia la izquierda */
+    margin-left: -300px !important; 
+
+    /* ─── PASO 3: EL LARGO (ALTURA) ─── */
+    padding: 65px 40px !important; 
+
+    display: block !important;
+    box-sizing: border-box !important;
+    margin-top: -8px;
+}
+
+/* La lista mágica que pone todo en fila */
+#left-history-list {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important; /* Separa las canciones de punta a punta */
+    width: 100% !important;
+    gap: 10px;
+}
+
+/* 🐾 AGRANDAMOS LAS TARJETAS PARA QUE LLENEN EL ESPACIO */
+.left-history-item {
+    flex: 1 !important; /* Cada tarjeta ocupa su parte del 100% */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 0;
+}
+.left-history-item:hover {
+    transform: translateY(-5px); /* Efecto de levante al pasar el mouse */
+    background: rgba(255, 0, 0, 0.05);
+}
+
+/* ─── EL HISTORIAL AISLADO (PARA QUE NO ROMPA NADA MÁS) ─── */
+
+.history-section-new {
+    width: 100% !important;
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alinea el texto 'ANTERIORES' a la izquierda */
+}
+
+/* 🐾 PORTADAS MÁS GRANDES */
+.left-h-art {
+    width: 200px !important; /* Tamaño uniforme para todas las portadas */
+    height: 200px !important;
+    border-radius: 20px;
+    border: 2px solid #635d5d;
+    box-shadow: 0 4px 10px rgba(226, 221, 221, 0.5);
+    margin-bottom: 8px; /* Espacio antes del texto */
+    object-fit: cover; /* Asegura que la imagen llene sin deformarse */
+}
+/* Info de texto del historial izquierdo */
+.left-h-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* H-Centra los elementos span */
+    width: 100%;
+}
+
+/* 🐾 TEXTOS MÁS LEGIBLES */
+.left-h-title {
+    font-size: 1.5rem !important; /* Título más presente */
+    font-weight: 800;
+    color: #e03b3b;
+    text-align: center;
+    width: 100%;
+    /* 🐾 El michi dice: Si el nombre es muy largo, que no rompa el diseño */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+
+.left-h-artist {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 1.3rem !important;
+    color: #6e6a6a !important;
+    font-weight: 600;
+    text-align: center !important;
+    width: 100%;
+    display: block;
+}
+
+.left-h-album {
+    /* 🐾 Usamos la misma fuente del reproductor */
+    font-family: 'Inter', sans-serif !important; 
+    font-size: 1.3rem !important; /* Mismo tamaño que el artista */
+    color: #eeb333 !important;      /* Blanco puro como el artista */
+    font-weight: 500;              /* Un peso medio para que sea legible */
+    opacity: 0.6;                  /* Lo hacemos un poco más tenue para que resalte la canción */
+    
+    /* 🐾 Alineación y control de espacio */
+    display: block;
+    width: 100%;
+    text-align: center !important;
+    margin-top: 2px;
+    
+    /* Evita que el texto rompa el cuadro si es muy largo */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 🐾 AJUSTE IMPORTANTE: La Columna Central debe ceder espacio */
+.center-col {
+    flex: 1 !important; /* Recupera su espacio equilibrado */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* Permite que los elementos internos decidan su ancho */
+    gap: 15px;
+    min-width: 0;
+}
+
+/*para cambiar el tamaño de la palabra ANTERIORES*/
+.section-tag {
+    font-size: 1.2rem;
+    color: #CF7230; 
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    display: block;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+
+    /* 🐾 LA FUNCIÓN DE MOVIMIENTO: 
+       Ajusta este número para que se mueva a la izquierda */
+    margin-left: -300px !important; 
+}
+
+/*Para cambiar cabecera ROCK, METAL, HIP HOP*/
+.song-header p {
+    font-size: 1.2rem;
+    color: #CF7230;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.marquee-box {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+#song-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #ff0000;
+    margin: 0;
+    display: inline-block;
+    animation: marquee-scroll 12s linear infinite;
+}
+
+#song-artist {
+    font-size: 1.8rem;
+    color: #bbb;
+    margin: 2px 0 0;
+}
+
+/* ─── ECUALIZADOR ────────────────────────────────────────────────────────────── */
+.spectrum-container {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 40px;
+    margin-top: 10px;
+    min-height: 40px;  /* Aseguramos que no se colapse */
+    justify-content: flex-start;
+}
+
+.bar {
+    width: 1%;
+    height: 100%;
+    background: #ff0000;
+    border-radius: 1px;
+    box-shadow: 0 0 8px rgba(255, 0, 0, 0.6);
+    animation: spectrum-classic 0.9s ease-in-out infinite;
+}
+
+.bar:nth-child(even) {
+    animation-duration: 0.7s;
+}
+
+.bar:nth-child(3n) {
+    animation-duration: 1.1s;
+}
+
+@keyframes spectrum-classic {
+
+    0%,
+    100% {
+        height: 15%;
+        opacity: 0.5;
+    }
+
+    50% {
+        height: 100%;
+        opacity: 1;
+    }
+}
+
+.spectrum-container.paused .bar {
+    animation-play-state: paused;
+    opacity: 0.2;
+    height: 4px;
+}
+
+/* ─── BARRA DE PROGRESO ──────────────────────────────────────────────────────── */
+.time-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 5px 0;
+    width: 100%;    /* Aseguramos que ocupe el ancho de su columna */
+}
+
+.time-txt {
+    font-family: monospace;
+    font-size: 1.2rem;
+    color: #ebb70c;
+    width: 45px;
+}
+
+.progress-bar-bg {
+    flex-grow: 1;
+    max-width: 85%; /* 🐾 PERO le ponemos un límite para que no empuje al reloj */
+    height: 12px !important;
+    background: #222;
+    border-radius: 6px;
+    border: 1px solid #444;
+}
+
+#progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff0000, #ff4d4d);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    border-radius: 6px;
+    transition: width 1s linear;
+}
+
+/* ─── BOTONES ────────────────────────────────────────────────────────────────── */
+.controls-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.station-row {
+    display: flex;
+    gap: 10px;
+}
+
+.sony-btn {
+    flex: 1;
+    background: #222;
+    border: 1px solid #444;
+    color: #888;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sony-btn.active {
+    color: #fff;
+    border-color: #ff0000;
+    background: #2a2a2a;
+}
+
+.sony-btn:hover {
+    border-color: #ff0000;
+    color: #fff;
+}
+
+.sony-action-btn {
+    width: 100%;
+    background: #ff0000;
+    color: #fff;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.sony-action-btn:hover {
+    background: #cc0000;
+}
+
+/* ─── HISTORIAL ──────────────────────────────────────────────────────────────── */
+.history-section {
+    border-top: 1px solid #282828;
+    padding-top: 15px;
+}
+
+/* Cambia de 3 columnas horizontales a 4 tarjetas verticales */
+.history-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.history-item-full {
+    display: flex;
+    flex-direction: column;
+    /* ← imagen arriba, texto abajo */
+    align-items: center;
+    gap: 6px;
+    cursor: zoom-in;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #2a2a2a;
+}
+
+.history-item-full img,
+.h-art {
+    width: 70% !important;
+    height: auto !important;
+    /* ← altura automática */
+    aspect-ratio: 1 / 1;
+    /* ← siempre cuadrada */
+    min-width: unset;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 1px solid #ff0000;
+    flex-shrink: 0;
+    display: block;
+}
+
+.h-info,
+.history-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    overflow: hidden;
+    min-width: 0;
+    width: 100%;
+    word-break: break-word;
+    text-align: center;
+    /* ← texto centrado bajo la imagen */
+}
+
+/*para aumentar el tamaño de nombre de cancion en panel ANTERIORES*/
+
+.h-title,
+.history-item-full .h-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #ff0000;
+    margin: 0;
+    white-space: normal;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+/*para cambiar el tamaño del nombre del artista en la seccion ANTERIORES*/
+.h-sub,
+.history-item-full .h-artist {
+    font-size: 1.2rem;
+    color: #aaa;
+    margin: 1px 0 0;
+    white-space: normal;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+/*para cambiar el tamaño del nombre de album en la seccion ANTERIORES*/
+
+.h-album,
+.history-item-full .h-album {
+    font-size: 1.3rem;
+    color: #CF7230;
+    margin: 1px 0 0;
+    white-space: normal;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+
+/* ─── COLUMNA DERECHA PANEL SIGUIENTE:────────────────────────────────────────────────────────── */
+.right-col {
+    /* Mantén tus anchos fijos de 400px o el que tengas definido */
+    width: 400px !important; 
+    min-width: 400px !important;
+    max-width: 400px !important;
+    
+    display: flex !important;
+    flex-direction: column !important; /* Mantenemos el orden vertical */
+    
+    /* 🐾 EL TRUCO DE INFRAESTRUCTURA: 
+       Cambiamos el alineado para que empuje TODO hacia el fondo (bottom) */
+    justify-content: flex-end !important; 
+    
+    /* 🐾 SEPARACIÓN MANTENIDA: 
+       Esto asegura que entre el recuadro y el volumen 
+       siempre haya 25px de distancia, bajen lo que bajen. */
+    gap: 25px !important; 
+    
+    /* Estilos visuales existentes */
+    border-left: 1px solid #ff0000;
+    padding-left: 20px;
+    
+    /* 🐾 Asegura que la columna ocupe todo el alto disponible 
+       para que el 'flex-end' funcione bien */
+    align-self: stretch !important; 
+}
+
+.next-section-box {
+    margin-bottom: 0 !important; /* Quitamos márgenes viejos */
+}
+
+/* 🐾 ALINEACIÓN DEL TÍTULO "SIGUIENTE:" */
+.next-section-box .section-tag {
+    margin-left: 0 !important; /* Lo pegamos al borde de la línea roja */
+    margin-bottom: 20px !important; /* Misma separación que en ANTERIORES */
+    text-align: left;
+}
+
+.next-card {
+    background: rgba(255, 0, 0, 0.05) !important;
+    padding: 30px 20px !important; /* Aumentamos el largo para que se vea imponente */
+    border-radius: 12px;
+    border: 1px solid rgba(255, 0, 0, 0.2);
+    
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important; /* 🐾 CENTRADO HORIZONTAL PERFECTO */
+    justify-content: center !important;; /* 🐾 CENTRADO VERTICAL PERFECTO */
+
+    width: 100% !important;
+    min-height: 700px; /* Le damos una altura mínima para que no se vea "flaco" */
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+}
+
+/* 🐾 LA VENTANA: Esta caja obliga al texto a ser horizontal */
+.next-card .marquee-box {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    /* 🐾 CLAVE: Evita que el texto se rompa en varias líneas */
+    text-align: left;
+    /* 🐾 CLAVE: Alinea el inicio a la izquierda */
+}
+
+/* LA PORTADA: panel SIGUIENTE Aquí es donde aumentamos el tamaño */
+#next-cover {
+    width: 350px !important;
+    /* De 100px subimos a 250px */
+    height: 300px !important;
+    /* De 100px subimos a 250px */
+    max-width: 280px !important;
+    border-radius: 15px;
+    object-fit: cover !important;
+    border: 2px solid #ff0000;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+}
+
+/* EL TEXTO: Más grande y legible */
+#next-title {
+    font-size: 1.5rem !important;
+    font-weight: bold;
+    color: #af0c0c;
+    margin: 10px 0 5px 0;
+
+    /* 🐾 ANIMACIÓN: Inline-block para que se mueva horizontalmente */
+    display: inline-block;
+    white-space: nowrap;
+    /* 🐾 Refuerzo para que no baje de línea */
+    padding-left: 10px;
+    /* 🐾 Pequeño margen para que no pegue al borde izq */
+
+    animation: marquee-scroll 12s linear infinite;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+#next-artist-sub {
+    font-size: 1.9rem !important;
+    /* Artista más grande */
+    color: #4A4646;
+    margin: 0;
+    font-weight: 600;
+}
+
+/* ─── VOLUMEN ─────────────────────────────────────────────────────────────────── */
+.volume-section-box {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid #222;
+}
+
+.vol-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+/* El icono del parlante 🔈 */
+.vol-icon {
+    font-size: 1.8rem !important;
+    /* Aumentamos el tamaño del emoji */
+}
+
+/* El número del volumen (ej: 80) */
+.vol-num {
+    font-size: 1.3rem !important;
+    /* Número más grande y legible */
+    color: #ff0000;
+    font-family: 'Inter', monospace;
+    font-weight: 900;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+}
+
+/* La barra de deslizamiento (Slider) */
+input[type=range]#volume-control {
+    appearance: none;
+    width: 100%;
+    height: 12px;
+    /* Barra más gruesa (estaba en 6px) */
+    background: #222;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+}
+
+/* El círculo que arrastras (Thumb) */
+input[type=range]#volume-control::-webkit-slider-thumb {
+    appearance: none;
+    width: 24px;
+    /* Círculo más grande */
+    height: 24px;
+    background: #ff0000;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+    border: 2px solid #fff;
+    /* Le da un toque premium */
+    transition: transform 0.2s ease;
+}
+
+input[type=range]#volume-control::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    /* Se agranda un poco al pasar el mouse */
+}
+
+/* ─── MARQUEE ────────────────────────────────────────────────────────────────── */
+@keyframes marquee-scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    30% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* ─── MODALES ────────────────────────────────────────────────────────────────── */
+.modal-overlay {
+    display: flex; /* Asegura que se vea al activarse */
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9); /* Fondo exterior más profundo */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-center-container {
+    width: 100%;
+    max-width: 1800px; /* Un poco más ancho para la tabla de AzuraCast */
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content {
+    background-color: #121212 !important; /* Negro AzuraCast */
+    border: 2px solid #ff0000 !important;
+    border-radius: 12px !important;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 100%;
+}
+
+.modal-header {
+    background: #1a1a1c;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #ff0000;
+}
+
+.modal-title-text {
+    color: #ff0000;
+    font-weight: bold;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.modal-body {
+    flex: 1; /* Esto obliga a que el cuerpo use todo el espacio disponible */
+    background: #1a1a1c;
+    position: relative;
+    padding: 0 !important; /* Quitamos padding para que el iframe llene todo */
+}
+
+/* 🐾 EL CORAZÓN DEL PANEL: EL IFRAME */
+#request-frame {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    background: #1a1a1c !important;
+    display: block;
+}
+
+/* 🐾 BOTÓN DE CIERRE ESTILO 'REBOOT' */
+.close-btn {
+    color: #ffffff;
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.close-btn:hover {
+    color: #ff0000;
+    transform: rotate(90deg);
+}
+
+/* ─── MODIFICACIÓN PARA PORTADA SIGUIENTE ─── */
+
+.next-up-box {
+    width: auto !important;
+    /* Cambiamos de 100px a auto */
+    height: auto !important;
+    /* Cambiamos de 100px a auto */
+    min-width: 180px;
+    /* Le damos un mínimo para que no se vea flaco */
+    display: flex;
+    flex-direction: column;
+    /* Apilamos imagen y texto */
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 15px;
+    border: 1px dashed rgba(255, 0, 0, 0.3);
+}
+
+.next-cover {
+    width: 200px !important;
+    /* Ahora sí crecerá */
+    height: 200px !important;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    border: 2px solid #ff0000;
+}
+
+/* ─── CONFIGURACIÓN DE INFRAESTRUCTURA: BOXED LAYOUT ─── */
+
+/* 🐾 EL ENVOLTORIO MAESTRO (CENTRADOR) */
+.main-wrapper {
+    max-width: 2400px !important;
+    margin: 0 auto !important;
+    padding: 0 15px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+

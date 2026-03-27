@@ -169,3 +169,50 @@ body {
     display: block !important;
 }
 
+/* Wrapper del reproductor con padding lateral */
+#walkman-horizontal {
+    display: flex !important;
+    width: calc(100% - 40px) !important;  /* Respira en los costados */
+    margin: 20px auto !important;          /* Centrado con espacio arriba */
+    background: #1a1a1c !important;
+    border-radius: 20px !important;
+    padding: 25px !important;
+    gap: 30px !important;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.8) !important;
+    border: 1px solid #ff0000 !important;
+    align-items: flex-start !important;
+    box-sizing: border-box !important;
+}
+
+/* Cover art LIMITADO en tamaño */
+.cover-art-box {
+    width: 140px !important;
+    height: 140px !important;
+    min-width: 140px !important;  /* No se expande */
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    border: 2px solid #ff0000 !important;
+}
+
+#cover-art {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
+
+/* Listeners box */
+.listeners-box {
+    background: rgba(255,0,0,0.1);
+    border: 1px solid #ff0000;
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 11px;
+    color: #ff0000;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* h-info historial */
+.h-info { display: flex; flex-direction: column; }
+.h-album { font-size: 0.7rem; color: #666; margin: 2px 0 0; }
+
